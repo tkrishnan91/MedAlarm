@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,6 +28,8 @@ class AlarmPage extends StatefulWidget {
 
 class _AlarmPageState extends State<AlarmPage> {
   List<TimeOfDay> _listOfAlarms = [];
+  static const platform = const MethodChannel('com.tsri.medalarm/alarm');
+
 
   void _registerAlarm() async {
     TimeOfDay selectedTime = await showTimePicker(
@@ -34,14 +38,23 @@ class _AlarmPageState extends State<AlarmPage> {
     );
 
     if (selectedTime != null) {
-      setState(() {
-        // This call to setState tells the Flutter framework that something has
-        // changed in this State, which causes it to rerun the build method below
-        // so that the display can reflect the updated values. If we changed
-        // _counter without calling setState(), then the build method would not be
-        // called again, and so nothing would appear to happen.
-        _listOfAlarms.add(selectedTime);
-      });
+      try {
+        await platform.invokeMethod("setAlarm", <String, dynamic>{
+          'hour': selectedTime.hour,
+          'minute': selectedTime.minute
+        });
+      } on PlatformException catch (e) {
+        print("Was not able to setAlarm" + e.toString());
+      }
+
+        setState(() {
+          // This call to setState tells the Flutter framework that something has
+          // changed in this State, which causes it to rerun the build method below
+          // so that the display can reflect the updated values. If we changed
+          // _counter without calling setState(), then the build method would not be
+          // called again, and so nothing would appear to happen.
+          _listOfAlarms.add(selectedTime);
+        });
     }
   }
 
