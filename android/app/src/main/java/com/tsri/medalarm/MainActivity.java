@@ -1,22 +1,18 @@
 package com.tsri.medalarm;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
 import java.util.Calendar;
 
-import io.flutter.app.FlutterActivity;
-import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
-public class MainActivity extends FlutterActivity {
-  static final int REQUEST_IMAGE_CAPTURE = 1;
+public class MainActivity extends BasicFlutterActivity {
   static MethodChannel alarmChannel;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +26,7 @@ public class MainActivity extends FlutterActivity {
         int hour = call.argument("hour");
         int minute = call.argument("minute");
         System.out.println("Received time: " + hour + ":" + minute);
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent(getApplicationContext(), CameraAlarmActivity.class);
         PendingIntent pendingCameraIntent = PendingIntent.getActivity(this, 1, takePictureIntent, 0);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -38,11 +34,13 @@ public class MainActivity extends FlutterActivity {
         calendar.set(Calendar.MINUTE, minute);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingCameraIntent);
         result.success(true);
-
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//          startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//         result.success(true);
-//        }
+      } else if (call.method.equals("getActivityInfo")) {
+        result.success(handleActivityInfo());
       }});
+  }
+
+  @Override
+  protected String handleActivityInfo() {
+    return this.getClass().getSimpleName();
   }
 }
