@@ -3,8 +3,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:medalarm/screens/AlarmConfigurationScreen.dart';
 import 'package:medalarm/screens/AlarmScreen.dart';
 import 'package:medalarm/screens/CameraScreen.dart';
+import 'package:medalarm/screens/MedHistoryScreen.dart';
 import 'package:medalarm/screens/TakeMedScreen.dart';
 import 'package:camera/camera.dart';
 
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           HOME_SCREEN: (BuildContext context) => TakeMedScreen(),
           CAMERA_SCREEN: (BuildContext context) => CameraScreen(this.cameras),
+          MEDHISTORY_SCREEN: (BuildContext context) => MedHistoryScreen(),
         }
       );
     }else {
@@ -48,6 +51,8 @@ class MyApp extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             HOME_SCREEN: (BuildContext context) => TakeMedScreen(),
             CAMERA_SCREEN: (BuildContext context) => CameraScreen(this.cameras),
+            MEDHISTORY_SCREEN: (BuildContext context) => MedHistoryScreen(),
+            ALARMCONFIGURATION_SCREEN: (BuildContext context) => AlarmConfigurationScreen(),
           }
       );
     }

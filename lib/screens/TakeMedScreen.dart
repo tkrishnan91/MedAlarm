@@ -141,7 +141,8 @@ class _TakeMedScreenState extends State<TakeMedScreen> {
             iconSize: 200,
             tooltip: 'Accept the picture',
             onPressed: () {
-              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              Navigator.pushNamed(context, MEDHISTORY_SCREEN);
+//              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
             },
           )
       ),

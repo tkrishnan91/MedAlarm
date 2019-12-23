@@ -102,9 +102,9 @@ class _CameraScreenState extends State<CameraScreen> {
       return null;
     }
     final Directory extDir = await getApplicationDocumentsDirectory();
-    final String dirPath = '${extDir.path}/FlutterDevs/Camera/Images';
+    final String dirPath = '${extDir.path}/MedAlarm/Camera/PastMeds';
     await new Directory(dirPath).create(recursive: true);
-    final String filePath = '$dirPath/${timestamp()}.jpg';
+    final String filePath = '$dirPath/${generateFileName()}.jpg';
 
     if (controller.value.isTakingPicture) {
       // A capture is already pending, do nothing.
@@ -123,6 +123,10 @@ class _CameraScreenState extends State<CameraScreen> {
   void showException(CameraException e) {
     logError(e.code, e.description);
     showMessage('Error: ${e.code}\n${e.description}');
+  }
+
+  String generateFileName() {
+    return timestamp();
   }
 
   void showMessage(String message) {

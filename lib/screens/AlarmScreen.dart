@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:medalarm/constants/constants.dart';
 
 class AlarmScreen extends StatefulWidget {
   AlarmScreen({Key key, this.title}) : super(key: key);
@@ -52,11 +53,6 @@ class _AlarmScreenState extends State<AlarmScreen> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: ListView.builder(
         itemCount: _listOfAlarms.length,
         itemBuilder: (BuildContext ctxt, int index) {
@@ -92,7 +88,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _registerAlarm,
+        onPressed: (){Navigator.pushNamed(context, ALARMCONFIGURATION_SCREEN);},
         tooltip: 'Add alarm',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
