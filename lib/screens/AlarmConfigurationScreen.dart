@@ -103,19 +103,6 @@ class _AlarmConfigurationScreenState extends State<AlarmConfigurationScreen> {
       }
 
       return (selectedTime.hour.toString() + ":" + selectedTime.minute.toString());
-
-
-      if(alarmSet)
-      {
-        setState(() {
-          // This call to setState tells the Flutter framework that something has
-          // changed in this State, which causes it to rerun the build method below
-          // so that the display can reflect the updated values. If we changed
-          // _counter without calling setState(), then the build method would not be
-          // called again, and so nothing would appear to happen.
-//          _listOfAlarms.add(selectedTime);
-        timeSet = (selectedTime.hour.toString() + ": " + selectedTime.minute.toString());
-        });}
     }
   }
 }
