@@ -1,4 +1,3 @@
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:medalarm/screens/AlarmConfigurationScreen.dart';
 import 'package:medalarm/screens/AlarmScreen.dart';
 import 'package:medalarm/screens/CameraScreen.dart';
+import 'package:medalarm/screens/HomeScreen.dart';
 import 'package:medalarm/screens/MedHistoryScreen.dart';
 import 'package:medalarm/screens/TakeMedScreen.dart';
-import 'package:camera/camera.dart';
 
 import 'constants/constants.dart';
 
@@ -24,39 +23,26 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   String activityName;
   List<CameraDescription> cameras;
-  MyApp(this.activityName, this.cameras);
+  Map<String, WidgetBuilder> routes;
+
+  MyApp(activityName, cameras) {
+    this.activityName = activityName;
+    this.cameras = cameras;
+    this.routes = <String, WidgetBuilder>{
+      HOME_SCREEN: (BuildContext context) => TakeMedScreen(),
+      CAMERA_SCREEN: (BuildContext context) => CameraScreen(cameras),
+      MEDHISTORY_SCREEN: (BuildContext context) => MedHistoryScreen(),
+      ALARMCONFIGURATION_SCREEN: (BuildContext context) => AlarmConfigurationScreen(),
+    };
+  }
+
   @override
-  Widget build(BuildContext context){
-    if(activityName == "CameraAlarmActivity")
-    {
-      return MaterialApp(
-        title: 'Sri Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
-        ),
-        home: TakeMedScreen(),
-        routes: <String, WidgetBuilder>{
-          HOME_SCREEN: (BuildContext context) => TakeMedScreen(),
-          CAMERA_SCREEN: (BuildContext context) => CameraScreen(this.cameras),
-          MEDHISTORY_SCREEN: (BuildContext context) => MedHistoryScreen(),
-        }
-      );
-    }else {
-      return MaterialApp(
-          title: 'Sri Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.deepOrange,
-          ),
-          home: AlarmScreen(title: 'Med Alarm'),
-          routes: <String, WidgetBuilder>{
-            HOME_SCREEN: (BuildContext context) => TakeMedScreen(),
-            CAMERA_SCREEN: (BuildContext context) => CameraScreen(this.cameras),
-            MEDHISTORY_SCREEN: (BuildContext context) => MedHistoryScreen(),
-            ALARMCONFIGURATION_SCREEN: (BuildContext context) => AlarmConfigurationScreen(),
-          }
-      );
+  Widget build(BuildContext context) {
+    //Depending on the calling activity, call the appropriate Widget.
+    if (activityName == "CameraAlarmActivity") {
+      return HomeScreen("Alarm", TakeMedScreen(), this.routes).build(context);
+    } else {
+      return HomeScreen("MedAlarm", AlarmScreen(title: 'Med Alarm'), this.routes).build(context);
     }
   }
 }
-
-

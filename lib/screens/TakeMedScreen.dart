@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:medalarm/constants/constants.dart';
 
 class TakeMedScreen extends StatefulWidget {

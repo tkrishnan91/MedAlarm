@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:medalarm/constants/constants.dart';
+import 'package:medalarm/model/AlarmModel.dart';
 
 class AlarmScreen extends StatefulWidget {
   AlarmScreen({Key key, this.title}) : super(key: key);
@@ -10,40 +10,7 @@ class AlarmScreen extends StatefulWidget {
 }
 
 class _AlarmScreenState extends State<AlarmScreen> {
-  List<TimeOfDay> _listOfAlarms = [];
-  static const platform = const MethodChannel('com.tsri.medalarm/alarm');
-
-
-  void _registerAlarm() async {
-    bool alarmSet = false;
-    TimeOfDay selectedTime = await showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-    );
-
-    if (selectedTime != null) {
-      try {
-        alarmSet = await platform.invokeMethod("setAlarm", <String, dynamic>{
-          'hour': selectedTime.hour,
-          'minute': selectedTime.minute
-        });
-      } on PlatformException catch (e) {
-        print("Was not able to setAlarm" + e.toString());
-      }
-
-      if(alarmSet)
-      {
-        setState(() {
-          // This call to setState tells the Flutter framework that something has
-          // changed in this State, which causes it to rerun the build method below
-          // so that the display can reflect the updated values. If we changed
-          // _counter without calling setState(), then the build method would not be
-          // called again, and so nothing would appear to happen.
-          _listOfAlarms.add(selectedTime);
-        });}
-    }
-  }
-
+  List<AlarmModel> _listOfAlarms = [];
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -63,8 +30,8 @@ class _AlarmScreenState extends State<AlarmScreen> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.alarm),
-                    title: Text(_listOfAlarms[index].format(ctxt)),
-                    subtitle: Text('Advil Morning'),
+                    title: Text(_listOfAlarms[index].time),
+                    subtitle: Text(_listOfAlarms[index].medName + " " + _listOfAlarms[index].medDosage.toString() + " mg"),
                   ),
                   ButtonTheme.bar(
                     // make buttons use the appropriate styles for cards
@@ -88,16 +55,25 @@ class _AlarmScreenState extends State<AlarmScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){Navigator.pushNamed(context, ALARMCONFIGURATION_SCREEN);},
+        onPressed: () {
+          _getAlarmInformation(context);
+          },
         tooltip: 'Add alarm',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  List<Widget> getListOfAlarms(List<TimeOfDay> listOfTimeOfDays) {
-    return listOfTimeOfDays
-        .map((dateTime) => Text(dateTime.format(context)))
-        .toList();
+  _getAlarmInformation(BuildContext context) async {
+    final result = await Navigator.pushNamed(context, ALARMCONFIGURATION_SCREEN);
+    setState(() {
+      _listOfAlarms.add(result);
+    });
   }
+
+//  List<Widget> getListOfAlarms(List<TimeOfDay> listOfTimeOfDays) {
+//    return listOfTimeOfDays
+//        .map((dateTime) => Text(dateTime.format(context)))
+//        .toList();
+//  }
 }
